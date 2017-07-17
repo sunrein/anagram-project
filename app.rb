@@ -1,11 +1,12 @@
 require 'sinatra'
 require 'json'
 
-post '/words' do
+post '/words.json' do
   # Takes a JSON array of English-language words and adds them to the corpus (data store).
   response = JSON.parse(request.body.read)
 
   add_words(response["words"])
+  status 201
 end
 
 # get '/anagrams/:word' do
