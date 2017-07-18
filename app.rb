@@ -6,19 +6,21 @@ post '/words.json' do
   response = JSON.parse(request.body.read)
 
   add_words(response["words"])
+
   status 201
 end
 
-# get '/anagrams/:word' do
-#   params[:word, :max]
-#   # Returns a JSON array of English-language words that are anagrams of the word passed in the URL.
-#   # This endpoint should support an optional query param that indicates the maximum number of results to return.
+get '/anagrams/:word.json' do
+  # This endpoint should support an optional query param that indicates the maximum number of results to return.
 
-#   # set parameters for the route
-#   # write a method that breaks up the given word (word.split.sort)
-#   # iterate through dictionary, first checking if each word matches the length of the given word, then (word.split.sort)
-#   # that word and compares the two arrays
-# end
+  word = params[:word].to_s
+
+  anagrams = { anagrams: find_anagrams(word) }
+
+  return JSON.generate(anagrams)
+
+  status 200
+end
 
 # delete '/words/:word' do
 #   params[:word]
@@ -39,3 +41,28 @@ def add_words(words)
     file.puts(words)
   end
 end
+
+def split_word(word)
+  word.split(//).sort
+end
+
+def find_anagrams(word)
+  @test_word = split_word(word)
+
+  anagrams = []
+
+  File.readlines("dictionary.txt").each do |entry|
+    entry = entry.gsub("\n", "")
+
+    if entry.length == @test_word.length
+      if entry.split(//).sort == @test_word
+        if entry != word
+          anagrams << entry
+        end
+      end
+    end
+  end
+  anagrams
+end
+
+find_anagrams("read")
