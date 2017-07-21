@@ -12,10 +12,10 @@ end
 
 get '/anagrams/:word.json' do
   word = params[:word].to_s
-  limit = params[:limit]
+  limit = params[:limit].to_i
 
   if limit
-    limited_anagrams = { anagrams: find_anagrams(word).slice!(0..limit.to_i - 1) }
+    limited_anagrams = { anagrams: find_anagrams(word).slice!(0..limit - 1) }
     return JSON.generate(limited_anagrams)
   else
     anagrams = { anagrams: find_anagrams(word) }
