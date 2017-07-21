@@ -3,7 +3,6 @@ require 'json'
 require 'fileutils'
 
 post '/words.json' do
-  # Takes a JSON array of English-language words and adds them to the corpus (data store).
   response = JSON.parse(request.body.read)
 
   add_words(response["words"])
@@ -22,7 +21,6 @@ get '/anagrams/:word.json' do
     anagrams = { anagrams: find_anagrams(word) }
     return JSON.generate(anagrams)
   end
-
 
   status 200
 end
